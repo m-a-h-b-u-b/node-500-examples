@@ -64,6 +64,199 @@ console.log(fullPath);
 
 <!-- Add remaining 47 examples similarly -->
 
+
+<details>
+<summary>OS Module</summary>
+
+```js
+// Example 4: System info
+const os = require('os');
+console.log('CPU architecture:', os.arch());
+console.log('Free memory (MB):', os.freemem() / 1024 / 1024);
+console.log('Platform:', os.platform());
+```
+</details>
+
+<details>
+<summary>Process Info</summary>
+
+```js
+// Example 5: Access process details
+console.log('PID:', process.pid);
+console.log('Node Version:', process.version);
+console.log('Uptime (s):', process.uptime());
+```
+</details>
+
+<details>
+<summary>Environment Variables</summary>
+
+```js
+// Example 6: Reading environment variables
+process.env.MY_APP_MODE = 'development';
+console.log('Mode:', process.env.MY_APP_MODE);
+```
+</details>
+
+<details>
+<summary>Console Utilities</summary>
+
+```js
+// Example 7: console methods
+console.time('Timer');
+console.log('Hello Console!');
+console.warn('Warning message');
+console.error('Error message');
+console.timeEnd('Timer');
+```
+</details>
+
+<details>
+<summary>URL Module</summary>
+
+```js
+// Example 8: Parse and format URLs
+const { URL } = require('url');
+const myURL = new URL('https://example.com/path?name=alice');
+console.log(myURL.hostname, myURL.searchParams.get('name'));
+```
+</details>
+
+<details>
+<summary>Events Emitter</summary>
+
+```js
+// Example 9: Custom event
+const EventEmitter = require('events');
+const emitter = new EventEmitter();
+emitter.on('greet', name => console.log(`Hello, ${name}`));
+emitter.emit('greet', 'Node.js');
+```
+</details>
+
+<details>
+<summary>Timers</summary>
+
+```js
+// Example 10: setInterval & clearInterval
+let count = 0;
+const id = setInterval(() => {
+  console.log('Tick', ++count);
+  if (count === 5) clearInterval(id);
+}, 1000);
+```
+</details>
+
+<details>
+<summary>Crypto Hash</summary>
+
+```js
+// Example 11: SHA256 hash
+const crypto = require('crypto');
+const hash = crypto.createHash('sha256').update('Hello').digest('hex');
+console.log(hash);
+```
+</details>
+
+<details>
+<summary>HTTP GET Request (native)</summary>
+
+```js
+// Example 12: Simple HTTP client
+const https = require('https');
+https.get('https://api.github.com', { headers: { 'User-Agent': 'node' } }, res => {
+  console.log('Status:', res.statusCode);
+});
+```
+</details>
+
+<details>
+<summary>Zlib Compression</summary>
+
+```js
+// Example 13: Gzip a file
+const fs = require('fs');
+const zlib = require('zlib');
+fs.createReadStream('input.txt')
+  .pipe(zlib.createGzip())
+  .pipe(fs.createWriteStream('input.txt.gz'));
+```
+</details>
+
+<details>
+<summary>Stream Transform</summary>
+
+```js
+// Example 14: Uppercase transform stream
+const { Transform } = require('stream');
+const upper = new Transform({
+  transform(chunk, enc, cb) {
+    cb(null, chunk.toString().toUpperCase());
+  }
+});
+process.stdin.pipe(upper).pipe(process.stdout);
+```
+</details>
+
+<details>
+<summary>Readline Interface</summary>
+
+```js
+// Example 15: Simple CLI prompt
+const readline = require('readline').createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+readline.question('Your name? ', name => {
+  console.log(`Hello, ${name}!`);
+  readline.close();
+});
+```
+</details>
+
+<details>
+<summary>Child Process Exec</summary>
+
+```js
+// Example 16: Run shell command
+const { exec } = require('child_process');
+exec('ls -lh', (err, stdout) => {
+  if (err) return console.error(err);
+  console.log(stdout);
+});
+```
+</details>
+
+<details>
+<summary>Cluster Basic</summary>
+
+```js
+// Example 17: Fork worker processes
+const cluster = require('cluster');
+const http = require('http');
+const os = require('os');
+if (cluster.isPrimary) {
+  os.cpus().forEach(() => cluster.fork());
+} else {
+  http.createServer((_, res) => res.end('Hello from worker')).listen(3000);
+}
+```
+</details>
+
+<details>
+<summary>DNS Lookup</summary>
+
+```js
+// Example 18: Resolve a domain
+const dns = require('dns');
+dns.lookup('example.com', (err, address) => {
+  if (err) throw err;
+  console.log('IP address:', address);
+});
+```
+</details>
+
+
 ---
 
 ## 2. Asynchronous Programming (≈50 Examples)
