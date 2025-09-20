@@ -3,7 +3,7 @@
 A massive collection of **500+ practical Node.js examples**, covering everything from basic concepts and core modules to advanced topics, real-time applications, databases, and practical projects.  
 Perfect for learners, teachers, and professionals. Contributions welcome!
 
-**Current Progress:** 45/500 examples completed ✅
+**Current Progress:** 15/500 examples completed ✅
 
 ---
 
