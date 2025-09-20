@@ -245,7 +245,7 @@ dns.lookup('example.com', (err, address) => {
 ## 2. Asynchronous Programming (≈50 Examples)
 
 <details>
-<summary>1. setTimeout Basic</summary>
+<summary>2.1 setTimeout Basic</summary>
 
 ```js
 setTimeout(() => console.log('Hello after 1s'), 1000);
@@ -253,7 +253,7 @@ setTimeout(() => console.log('Hello after 1s'), 1000);
 </details>
 
 <details>
-<summary>2. setInterval Counter</summary>
+<summary>2.2 setInterval Counter</summary>
 
 ```js
 let i = 0;
@@ -265,7 +265,7 @@ const id = setInterval(() => {
 </details>
 
 <details>
-<summary>3. setImmediate</summary>
+<summary>2.3 setImmediate</summary>
 
 ```js
 setImmediate(() => console.log('Runs after current loop'));
@@ -273,7 +273,7 @@ setImmediate(() => console.log('Runs after current loop'));
 </details>
 
 <details>
-<summary>4. process.nextTick</summary>
+<summary>2.4 process.nextTick</summary>
 
 ```js
 process.nextTick(() => console.log('Next tick callback'));
@@ -281,7 +281,7 @@ process.nextTick(() => console.log('Next tick callback'));
 </details>
 
 <details>
-<summary>5. Callback Example</summary>
+<summary>2.5 Callback Example</summary>
 
 ```js
 function add(a,b,cb){ cb(a+b); }
@@ -290,7 +290,7 @@ add(2,3,res=>console.log(res));
 </details>
 
 <details>
-<summary>6. Callback Error Handling</summary>
+<summary>2.6 Callback Error Handling</summary>
 
 ```js
 function risky(cb){
@@ -302,7 +302,7 @@ risky(err => err && console.error(err.message));
 </details>
 
 <details>
-<summary>7. Promise Basic</summary>
+<summary>2.7 Promise Basic</summary>
 
 ```js
 new Promise(res=>res('Done')).then(console.log);
@@ -310,7 +310,7 @@ new Promise(res=>res('Done')).then(console.log);
 </details>
 
 <details>
-<summary>8. Promise Chain</summary>
+<summary>2.8 Promise Chain</summary>
 
 ```js
 Promise.resolve(2).then(x=>x*3).then(console.log);
@@ -318,7 +318,7 @@ Promise.resolve(2).then(x=>x*3).then(console.log);
 </details>
 
 <details>
-<summary>9. Promise.all</summary>
+<summary>2.9 Promise.all</summary>
 
 ```js
 Promise.all([Promise.resolve(1),Promise.resolve(2)]).then(console.log);
@@ -326,7 +326,7 @@ Promise.all([Promise.resolve(1),Promise.resolve(2)]).then(console.log);
 </details>
 
 <details>
-<summary>10. Promise.race</summary>
+<summary>2.10 Promise.race</summary>
 
 ```js
 Promise.race([
@@ -337,7 +337,7 @@ Promise.race([
 </details>
 
 <details>
-<summary>11. Async/Await</summary>
+<summary>2.11 Async/Await</summary>
 
 ```js
 (async () => {
@@ -348,7 +348,7 @@ Promise.race([
 </details>
 
 <details>
-<summary>12. Async Error Handling</summary>
+<summary>2.12 Async Error Handling</summary>
 
 ```js
 (async ()=>{
@@ -359,7 +359,7 @@ Promise.race([
 </details>
 
 <details>
-<summary>13. fs.promises</summary>
+<summary>2.13 fs.promises</summary>
 
 ```js
 const fs = require('fs').promises;
@@ -371,7 +371,7 @@ const fs = require('fs').promises;
 </details>
 
 <details>
-<summary>14. util.promisify</summary>
+<summary>2.14 util.promisify</summary>
 
 ```js
 const {promisify} = require('util');
@@ -381,7 +381,7 @@ readFile('file.txt','utf8').then(console.log);
 </details>
 
 <details>
-<summary>15. Delay Function</summary>
+<summary>2.15 Delay Function</summary>
 
 ```js
 const delay = ms => new Promise(r=>setTimeout(r,ms));
@@ -390,7 +390,7 @@ delay(500).then(()=>console.log('Done'));
 </details>
 
 <details>
-<summary>16. Parallel Tasks</summary>
+<summary>2.16 Parallel Tasks</summary>
 
 ```js
 async function run() {
@@ -402,7 +402,7 @@ run();
 </details>
 
 <details>
-<summary>17. Sequential Tasks</summary>
+<summary>2.17 Sequential Tasks</summary>
 
 ```js
 async function run() {
@@ -415,7 +415,7 @@ run();
 </details>
 
 <details>
-<summary>18. Async Map</summary>
+<summary>2.18 Async Map</summary>
 
 ```js
 async function asyncMap(arr, fn){
@@ -426,7 +426,7 @@ asyncMap([1,2], async x=>x*2).then(console.log);
 </details>
 
 <details>
-<summary>19. Retry Logic</summary>
+<summary>2.19 Retry Logic</summary>
 
 ```js
 async function retry(fn, n=3){
@@ -439,7 +439,7 @@ async function retry(fn, n=3){
 </details>
 
 <details>
-<summary>20. Race with Timeout</summary>
+<summary>2.20 Race with Timeout</summary>
 
 ```js
 function withTimeout(p, ms){
@@ -450,7 +450,7 @@ function withTimeout(p, ms){
 </details>
 
 <details>
-<summary>21. EventEmitter Async</summary>
+<summary>2.21 EventEmitter Async</summary>
 
 ```js
 const {EventEmitter} = require('events');
@@ -461,7 +461,7 @@ em.emit('data','Hello');
 </details>
 
 <details>
-<summary>22. Stream Async Iteration</summary>
+<summary>2.22 Stream Async Iteration</summary>
 
 ```js
 const fs = require('fs');
@@ -474,7 +474,7 @@ const fs = require('fs');
 </details>
 
 <details>
-<summary>23. Worker Threads</summary>
+<summary>2.23 Worker Threads</summary>
 
 ```js
 const { Worker } = require('worker_threads');
@@ -483,7 +483,7 @@ new Worker('console.log("worker")',{eval:true});
 </details>
 
 <details>
-<summary>24. Timers Promises</summary>
+<summary>2.24 Timers Promises</summary>
 
 ```js
 const { setTimeout } = require('timers/promises');
@@ -493,7 +493,7 @@ console.log('done');
 </details>
 
 <details>
-<summary>25. Async Generator</summary>
+<summary>2.25 Async Generator</summary>
 
 ```js
 async function* gen(){
@@ -505,7 +505,7 @@ for await(const x of gen()) console.log(x);
 </details>
 
 <details>
-<summary>26. Pipeline Promises</summary>
+<summary>2.26 Pipeline Promises</summary>
 
 ```js
 const {pipeline} = require('stream/promises');
@@ -514,7 +514,7 @@ await pipeline(fs.createReadStream('a.txt'), fs.createWriteStream('b.txt'));
 </details>
 
 <details>
-<summary>27. callbackify</summary>
+<summary>2.27 callbackify</summary>
 
 ```js
 const {callbackify} = require('util');
@@ -524,7 +524,7 @@ callbackify(fn)((err,res)=>console.log(res));
 </details>
 
 <details>
-<summary>28. AbortController</summary>
+<summary>2.28 AbortController</summary>
 
 ```js
 const controller = new AbortController();
@@ -534,7 +534,7 @@ controller.abort();
 </details>
 
 <details>
-<summary>29. Semaphore</summary>
+<summary>2.29 Semaphore</summary>
 
 ```js
 class Semaphore {
@@ -552,7 +552,7 @@ class Semaphore {
 </details>
 
 <details>
-<summary>30. Async Queue with setTimeout</summary>
+<summary>2.30 Async Queue with setTimeout</summary>
 
 ```js
 const tasks=[1,2,3];
