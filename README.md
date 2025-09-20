@@ -573,23 +573,83 @@ runQueue();
 ## 3. Web Development with Express.js (≈80 Examples)
 
 <details>
-<summary>Simple Express Server</summary>
+<summary>3.1 A simple Express.js server that responds with "Hello World"</summary>
 
 ```js
-// Example 1: Basic Express app
 const express = require('express');
 const app = express();
-app.get('/', (req, res) => res.send('Hello Express!'));
-app.listen(3000, () => console.log('Server running on port 3000'));
+const PORT = 3000;
+
+app.get('/', (req, res) => {
+  res.send('Hello World');
+});
+
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
 ```
 
 </details>
 
 <details>
+<summary>3.2 RESTful API (CRUD for Users)</summary>
+
+```js
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+let users = [{ id: 1, name: 'Alice' }];
+
+app.get('/users', (req, res) => res.json(users));
+app.post('/users', (req, res) => {
+  const user = { id: Date.now(), name: req.body.name };
+  users.push(user);
+  res.status(201).json(user);
+});
+app.put('/users/:id', (req, res) => {
+  const user = users.find(u => u.id == req.params.id);
+  if (!user) return res.sendStatus(404);
+  user.name = req.body.name;
+  res.json(user);
+});
+app.delete('/users/:id', (req, res) => {
+  users = users.filter(u => u.id != req.params.id);
+  res.sendStatus(204);
+});
+
+app.listen(3000, () => console.log('API ready on http://localhost:3000'));
+```
+
+</details>
+
+
+<details>
 <summary>Routing</summary>
 
 ```js
-// Example 2: Dynamic route
+app.get('/user/:id', (req, res) => {
+  res.send(`User ID: ${req.params.id}`);
+});
+```
+
+</details>
+
+
+<details>
+<summary>Routing</summary>
+
+```js
+app.get('/user/:id', (req, res) => {
+  res.send(`User ID: ${req.params.id}`);
+});
+```
+
+</details>
+
+
+<details>
+<summary>Routing</summary>
+
+```js
 app.get('/user/:id', (req, res) => {
   res.send(`User ID: ${req.params.id}`);
 });
