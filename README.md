@@ -23,7 +23,7 @@ Perfect for learners, teachers, and professionals. Contributions welcome!
 ## 1. Basic Concepts & Core Modules (≈50 Examples)
 
 <details>
-<summary>Hello World Examples</summary>
+<summary>1. Hello World Examples</summary>
 
 ```js
 // Example 1: Basic HTTP Server
@@ -37,7 +37,7 @@ server.listen(3000, () => console.log('Server running on port 3000'));
 </details>
 
 <details>
-<summary>File System (fs)</summary>
+<summary>2. File System (fs)</summary>
 
 ```js
 // Example 2: Read file asynchronously
@@ -51,7 +51,7 @@ fs.readFile('example.txt', 'utf8', (err, data) => {
 </details>
 
 <details>
-<summary>Path Module</summary>
+<summary>3. Path Module</summary>
 
 ```js
 // Example 3: Join paths
@@ -66,7 +66,7 @@ console.log(fullPath);
 
 
 <details>
-<summary>OS Module</summary>
+<summary>4. OS Module</summary>
 
 ```js
 // Example 4: System info
@@ -78,7 +78,7 @@ console.log('Platform:', os.platform());
 </details>
 
 <details>
-<summary>Process Info</summary>
+<summary>5. Process Info</summary>
 
 ```js
 // Example 5: Access process details
@@ -89,7 +89,7 @@ console.log('Uptime (s):', process.uptime());
 </details>
 
 <details>
-<summary>Environment Variables</summary>
+<summary>6. Environment Variables</summary>
 
 ```js
 // Example 6: Reading environment variables
@@ -99,7 +99,7 @@ console.log('Mode:', process.env.MY_APP_MODE);
 </details>
 
 <details>
-<summary>Console Utilities</summary>
+<summary>7. Console Utilities</summary>
 
 ```js
 // Example 7: console methods
@@ -112,7 +112,7 @@ console.timeEnd('Timer');
 </details>
 
 <details>
-<summary>URL Module</summary>
+<summary>8. URL Module</summary>
 
 ```js
 // Example 8: Parse and format URLs
@@ -123,7 +123,7 @@ console.log(myURL.hostname, myURL.searchParams.get('name'));
 </details>
 
 <details>
-<summary>Events Emitter</summary>
+<summary>9. Events Emitter</summary>
 
 ```js
 // Example 9: Custom event
@@ -135,7 +135,7 @@ emitter.emit('greet', 'Node.js');
 </details>
 
 <details>
-<summary>Timers</summary>
+<summary>10. Timers</summary>
 
 ```js
 // Example 10: setInterval & clearInterval
@@ -148,7 +148,7 @@ const id = setInterval(() => {
 </details>
 
 <details>
-<summary>Crypto Hash</summary>
+<summary>11. Crypto Hash</summary>
 
 ```js
 // Example 11: SHA256 hash
@@ -159,7 +159,7 @@ console.log(hash);
 </details>
 
 <details>
-<summary>HTTP GET Request (native)</summary>
+<summary>12. HTTP GET Request (native)</summary>
 
 ```js
 // Example 12: Simple HTTP client
@@ -171,7 +171,7 @@ https.get('https://api.github.com', { headers: { 'User-Agent': 'node' } }, res =
 </details>
 
 <details>
-<summary>Zlib Compression</summary>
+<summary>13. Zlib Compression</summary>
 
 ```js
 // Example 13: Gzip a file
@@ -184,7 +184,7 @@ fs.createReadStream('input.txt')
 </details>
 
 <details>
-<summary>Stream Transform</summary>
+<summary>14. Stream Transform</summary>
 
 ```js
 // Example 14: Uppercase transform stream
@@ -199,7 +199,7 @@ process.stdin.pipe(upper).pipe(process.stdout);
 </details>
 
 <details>
-<summary>Readline Interface</summary>
+<summary>15. Readline Interface</summary>
 
 ```js
 // Example 15: Simple CLI prompt
@@ -215,7 +215,7 @@ readline.question('Your name? ', name => {
 </details>
 
 <details>
-<summary>Child Process Exec</summary>
+<summary>16. Child Process Exec</summary>
 
 ```js
 // Example 16: Run shell command
@@ -228,7 +228,7 @@ exec('ls -lh', (err, stdout) => {
 </details>
 
 <details>
-<summary>Cluster Basic</summary>
+<summary>17. Cluster Basic</summary>
 
 ```js
 // Example 17: Fork worker processes
@@ -244,7 +244,7 @@ if (cluster.isPrimary) {
 </details>
 
 <details>
-<summary>DNS Lookup</summary>
+<summary>18. DNS Lookup</summary>
 
 ```js
 // Example 18: Resolve a domain
