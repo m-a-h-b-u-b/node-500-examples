@@ -3,7 +3,7 @@
 A massive collection of **500+ practical Node.js examples**, covering everything from basic concepts and core modules to advanced topics, real-time applications, databases, and practical projects.  
 Perfect for learners, teachers, and professionals. Contributions welcome!
 
-**Current Progress:** 15/500 examples completed ✅
+**Current Progress:** 60/500 examples completed ✅
 
 ---
 
@@ -256,39 +256,335 @@ dns.lookup('example.com', (err, address) => {
 ```
 </details>
 
-
+[Return to Table of Contents](#table-of-contents)
 ---
 
 ## 2. Asynchronous Programming (≈50 Examples)
 
 <details>
-<summary>Callbacks</summary>
+<summary>1. setTimeout Basic</summary>
 
 ```js
-// Example 1: Simple callback
-function greet(name, callback) {
-  callback(`Hello, ${name}`);
-}
-greet('Alice', console.log);
+setTimeout(() => console.log('Hello after 1s'), 1000);
 ```
-
 </details>
 
 <details>
-<summary>Promises</summary>
+<summary>2. setInterval Counter</summary>
 
 ```js
-// Example 2: Promise chaining
-const promise = new Promise((resolve, reject) => {
-  setTimeout(() => resolve('Done!'), 1000);
-});
-promise.then(console.log).catch(console.error);
+let i = 0;
+const id = setInterval(() => {
+  console.log(++i);
+  if(i===5) clearInterval(id);
+}, 500);
 ```
+</details>
 
+<details>
+<summary>3. setImmediate</summary>
+
+```js
+setImmediate(() => console.log('Runs after current loop'));
+```
+</details>
+
+<details>
+<summary>4. process.nextTick</summary>
+
+```js
+process.nextTick(() => console.log('Next tick callback'));
+```
+</details>
+
+<details>
+<summary>5. Callback Example</summary>
+
+```js
+function add(a,b,cb){ cb(a+b); }
+add(2,3,res=>console.log(res));
+```
+</details>
+
+<details>
+<summary>6. Callback Error Handling</summary>
+
+```js
+function risky(cb){
+  try { throw new Error('fail'); }
+  catch(e){ cb(e); }
+}
+risky(err => err && console.error(err.message));
+```
+</details>
+
+<details>
+<summary>7. Promise Basic</summary>
+
+```js
+new Promise(res=>res('Done')).then(console.log);
+```
+</details>
+
+<details>
+<summary>8. Promise Chain</summary>
+
+```js
+Promise.resolve(2).then(x=>x*3).then(console.log);
+```
+</details>
+
+<details>
+<summary>9. Promise.all</summary>
+
+```js
+Promise.all([Promise.resolve(1),Promise.resolve(2)]).then(console.log);
+```
+</details>
+
+<details>
+<summary>10. Promise.race</summary>
+
+```js
+Promise.race([
+  new Promise(r=>setTimeout(()=>r('fast'),100)),
+  new Promise(r=>setTimeout(()=>r('slow'),500))
+]).then(console.log);
+```
+</details>
+
+<details>
+<summary>11. Async/Await</summary>
+
+```js
+(async () => {
+  const v = await Promise.resolve('Awaited');
+  console.log(v);
+})();
+```
+</details>
+
+<details>
+<summary>12. Async Error Handling</summary>
+
+```js
+(async ()=>{
+  try{ await Promise.reject('Fail'); }
+  catch(e){ console.error(e); }
+})();
+```
+</details>
+
+<details>
+<summary>13. fs.promises</summary>
+
+```js
+const fs = require('fs').promises;
+(async ()=>{
+  const txt = await fs.readFile('file.txt','utf8');
+  console.log(txt);
+})();
+```
+</details>
+
+<details>
+<summary>14. util.promisify</summary>
+
+```js
+const {promisify} = require('util');
+const readFile = promisify(require('fs').readFile);
+readFile('file.txt','utf8').then(console.log);
+```
+</details>
+
+<details>
+<summary>15. Delay Function</summary>
+
+```js
+const delay = ms => new Promise(r=>setTimeout(r,ms));
+delay(500).then(()=>console.log('Done'));
+```
+</details>
+
+<details>
+<summary>16. Parallel Tasks</summary>
+
+```js
+async function run() {
+  const [a,b] = await Promise.all([delay(100), delay(200)]);
+  console.log('parallel done');
+}
+run();
+```
+</details>
+
+<details>
+<summary>17. Sequential Tasks</summary>
+
+```js
+async function run() {
+  await delay(100);
+  await delay(200);
+  console.log('sequential done');
+}
+run();
+```
+</details>
+
+<details>
+<summary>18. Async Map</summary>
+
+```js
+async function asyncMap(arr, fn){
+  return Promise.all(arr.map(fn));
+}
+asyncMap([1,2], async x=>x*2).then(console.log);
+```
+</details>
+
+<details>
+<summary>19. Retry Logic</summary>
+
+```js
+async function retry(fn, n=3){
+  for(let i=0;i<n;i++){
+    try{return await fn();}
+    catch(e){ if(i===n-1) throw e; }
+  }
+}
+```
+</details>
+
+<details>
+<summary>20. Race with Timeout</summary>
+
+```js
+function withTimeout(p, ms){
+  const t = new Promise((_,rej)=>setTimeout(()=>rej('Timeout'), ms));
+  return Promise.race([p,t]);
+}
+```
+</details>
+
+<details>
+<summary>21. EventEmitter Async</summary>
+
+```js
+const {EventEmitter} = require('events');
+const em = new EventEmitter();
+em.on('data', async d => console.log(await Promise.resolve(d)));
+em.emit('data','Hello');
+```
+</details>
+
+<details>
+<summary>22. Stream Async Iteration</summary>
+
+```js
+const fs = require('fs');
+(async ()=>{
+  for await(const chunk of fs.createReadStream('file.txt')){
+    console.log(chunk.toString());
+  }
+})();
+```
+</details>
+
+<details>
+<summary>23. Worker Threads</summary>
+
+```js
+const { Worker } = require('worker_threads');
+new Worker('console.log("worker")',{eval:true});
+```
+</details>
+
+<details>
+<summary>24. Timers Promises</summary>
+
+```js
+const { setTimeout } = require('timers/promises');
+await setTimeout(500);
+console.log('done');
+```
+</details>
+
+<details>
+<summary>25. Async Generator</summary>
+
+```js
+async function* gen(){
+  yield await Promise.resolve(1);
+  yield 2;
+}
+for await(const x of gen()) console.log(x);
+```
+</details>
+
+<details>
+<summary>26. Pipeline Promises</summary>
+
+```js
+const {pipeline} = require('stream/promises');
+await pipeline(fs.createReadStream('a.txt'), fs.createWriteStream('b.txt'));
+```
+</details>
+
+<details>
+<summary>27. callbackify</summary>
+
+```js
+const {callbackify} = require('util');
+const fn = async ()=>'done';
+callbackify(fn)((err,res)=>console.log(res));
+```
+</details>
+
+<details>
+<summary>28. AbortController</summary>
+
+```js
+const controller = new AbortController();
+fetch('https://example.com',{signal:controller.signal});
+controller.abort();
+```
+</details>
+
+<details>
+<summary>29. Semaphore</summary>
+
+```js
+class Semaphore {
+  constructor(n){this.n=n; this.q=[];}
+  async acquire(){
+    if(this.n>0){this.n--; return;}
+    await new Promise(r=>this.q.push(r));
+  }
+  release(){
+    this.n++;
+    if(this.q.length) this.q.shift()();
+  }
+}
+```
+</details>
+
+<details>
+<summary>30. Async Queue with setTimeout</summary>
+
+```js
+const tasks=[1,2,3];
+function runQueue(){
+  if(!tasks.length) return;
+  console.log(tasks.shift());
+  setTimeout(runQueue,200);
+}
+runQueue();
+```
 </details>
 
 <!-- Add remaining async examples -->
 
+[Return to Table of Contents](#table-of-contents)
 ---
 
 ## 3. Web Development with Express.js (≈80 Examples)
@@ -320,6 +616,7 @@ app.get('/user/:id', (req, res) => {
 
 <!-- Add remaining Express examples -->
 
+[Return to Table of Contents](#table-of-contents)
 ---
 
 ## 4. Databases (≈50 Examples)
@@ -351,6 +648,7 @@ console.log(res.rows[0]);
 
 <!-- Add MySQL and other DB examples -->
 
+[Return to Table of Contents](#table-of-contents)
 ---
 
 ## 5. Real-time Applications (≈40 Examples)
@@ -381,6 +679,7 @@ app.get('/events', (req, res) => {
 
 </details>
 
+[Return to Table of Contents](#table-of-contents)
 ---
 
 ## 6. Advanced Topics (≈60 Examples)
@@ -417,6 +716,7 @@ ls.stdout.on('data', data => console.log(`Output: ${data}`));
 
 <!-- Add remaining advanced examples -->
 
+[Return to Table of Contents](#table-of-contents)
 ---
 
 ## 7. Practical Projects & Utilities (≈100+ Examples)
@@ -446,6 +746,7 @@ transporter.sendMail({ from:'you@domain.com', to:'user@domain.com', subject:'Tes
 
 <!-- Add remaining project examples -->
 
+[Return to Table of Contents](#table-of-contents)
 ---
 
 ## 8. Contribution Guide
@@ -472,6 +773,7 @@ We welcome contributions! To add new examples:
 
 > **Keep examples small, well-commented, and tested.**
 
+[Return to Table of Contents](#table-of-contents)
 ---
 
 ## 9. Roadmap
