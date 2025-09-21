@@ -3,7 +3,7 @@
 A massive collection of **500+ practical Node.js examples**, covering everything from basic concepts and core modules to advanced topics, real-time applications, databases, and practical projects.  
 Perfect for learners, teachers, and professionals. Contributions welcome!
 
-**Current Progress:** 81/500 examples completed ✅
+**Current Progress:** 68/500 examples completed ✅
 
 ---
 
@@ -247,323 +247,288 @@ dns.lookup('example.com', (err, address) => {
 ## 2. Asynchronous Programming 
 
 <details>
-<summary>2.1 setTimeout Basic</summary>
-
-```js
-setTimeout(() => console.log('Hello after 1s'), 1000);
-```
-</details>
-
-<details>
-<summary>2.2 setInterval Counter</summary>
-
-```js
-let i = 0;
-const id = setInterval(() => {
-  console.log(++i);
-  if(i===5) clearInterval(id);
-}, 500);
-```
-</details>
-
-<details>
-<summary>2.3 setImmediate</summary>
-
-```js
-setImmediate(() => console.log('Runs after current loop'));
-```
-</details>
-
-<details>
-<summary>2.4 process.nextTick</summary>
-
-```js
-process.nextTick(() => console.log('Next tick callback'));
-```
-</details>
-
-<details>
-<summary>2.5 Callback Example</summary>
-
-```js
-function add(a,b,cb){ cb(a+b); }
-add(2,3,res=>console.log(res));
-```
-</details>
-
-<details>
-<summary>2.6 Callback Error Handling</summary>
-
-```js
-function risky(cb){
-  try { throw new Error('fail'); }
-  catch(e){ cb(e); }
-}
-risky(err => err && console.error(err.message));
-```
-</details>
-
-<details>
-<summary>2.7 Promise Basic</summary>
-
-```js
-new Promise(res=>res('Done')).then(console.log);
-```
-</details>
-
-<details>
-<summary>2.8 Promise Chain</summary>
-
-```js
-Promise.resolve(2).then(x=>x*3).then(console.log);
-```
-</details>
-
-<details>
-<summary>2.9 Promise.all</summary>
-
-```js
-Promise.all([Promise.resolve(1),Promise.resolve(2)]).then(console.log);
-```
-</details>
-
-<details>
-<summary>2.10 Promise.race</summary>
-
-```js
-Promise.race([
-  new Promise(r=>setTimeout(()=>r('fast'),100)),
-  new Promise(r=>setTimeout(()=>r('slow'),500))
-]).then(console.log);
-```
-</details>
-
-<details>
-<summary>2.11 Async/Await</summary>
-
-```js
-(async () => {
-  const v = await Promise.resolve('Awaited');
-  console.log(v);
-})();
-```
-</details>
-
-<details>
-<summary>2.12 Async Error Handling</summary>
-
-```js
-(async ()=>{
-  try{ await Promise.reject('Fail'); }
-  catch(e){ console.error(e); }
-})();
-```
-</details>
-
-<details>
-<summary>2.13 fs.promises</summary>
-
-```js
-const fs = require('fs').promises;
-(async ()=>{
-  const txt = await fs.readFile('file.txt','utf8');
-  console.log(txt);
-})();
-```
-</details>
-
-<details>
-<summary>2.14 util.promisify</summary>
-
-```js
-const {promisify} = require('util');
-const readFile = promisify(require('fs').readFile);
-readFile('file.txt','utf8').then(console.log);
-```
-</details>
-
-<details>
-<summary>2.15 Delay Function</summary>
-
-```js
-const delay = ms => new Promise(r=>setTimeout(r,ms));
-delay(500).then(()=>console.log('Done'));
-```
-</details>
-
-<details>
-<summary>2.16 Parallel Tasks</summary>
-
-```js
-async function run() {
-  const [a,b] = await Promise.all([delay(100), delay(200)]);
-  console.log('parallel done');
-}
-run();
-```
-</details>
-
-<details>
-<summary>2.17 Sequential Tasks</summary>
-
-```js
-async function run() {
-  await delay(100);
-  await delay(200);
-  console.log('sequential done');
-}
-run();
-```
-</details>
-
-<details>
-<summary>2.18 Async Map</summary>
-
-```js
-async function asyncMap(arr, fn){
-  return Promise.all(arr.map(fn));
-}
-asyncMap([1,2], async x=>x*2).then(console.log);
-```
-</details>
-
-<details>
-<summary>2.19 Retry Logic</summary>
-
-```js
-async function retry(fn, n=3){
-  for(let i=0;i<n;i++){
-    try{return await fn();}
-    catch(e){ if(i===n-1) throw e; }
-  }
-}
-```
-</details>
-
-<details>
-<summary>2.20 Race with Timeout</summary>
-
-```js
-function withTimeout(p, ms){
-  const t = new Promise((_,rej)=>setTimeout(()=>rej('Timeout'), ms));
-  return Promise.race([p,t]);
-}
-```
-</details>
-
-<details>
-<summary>2.21 EventEmitter Async</summary>
-
-```js
-const {EventEmitter} = require('events');
-const em = new EventEmitter();
-em.on('data', async d => console.log(await Promise.resolve(d)));
-em.emit('data','Hello');
-```
-</details>
-
-<details>
-<summary>2.22 Stream Async Iteration</summary>
+<summary>2.1 Basic callback pattern</summary>
 
 ```js
 const fs = require('fs');
-(async ()=>{
-  for await(const chunk of fs.createReadStream('file.txt')){
-    console.log(chunk.toString());
+
+console.log('Reading file...');
+fs.readFile('example.txt', 'utf8', (err, data) => {
+  if (err) return console.error('Error:', err);
+  console.log('File content:', data);
+});
+console.log('This prints first while file is being read.');
+
+```
+</details>
+
+<details>
+<summary>2.2 Promise-based File Read</summary>
+
+```js
+const fs = require('fs').promises;
+
+console.log('Reading file with promises...');
+fs.readFile('example.txt', 'utf8')
+  .then(data => console.log('Content:', data))
+  .catch(err => console.error(err));
+
+```
+</details>
+
+<details>
+<summary>2.3 Async/Await with Try–Catch</summary>
+
+```js
+const fs = require('fs').promises;
+
+async function showFile() {
+  try {
+    const data = await fs.readFile('example.txt', 'utf8');
+    console.log('File data:', data);
+  } catch (err) {
+    console.error('Read error:', err);
+  }
+}
+showFile();
+
+```
+</details>
+
+<details>
+<summary>2.4 Parallel Execution with Promise.all</summary>
+
+```js
+const fetch = require('node-fetch'); // npm i node-fetch
+
+async function fetchData() {
+  const urls = ['https://api.github.com', 'https://jsonplaceholder.typicode.com/todos/1'];
+  const results = await Promise.all(urls.map(url => fetch(url).then(r => r.json())));
+  console.log('Responses:', results);
+}
+fetchData();
+```
+</details>
+
+<details>
+<summary>2.5 Event Loop & setImmediate vs setTimeout</summary>
+
+```js
+console.log('Start');
+
+setTimeout(() => console.log('Timeout callback'), 0);
+setImmediate(() => console.log('Immediate callback'));
+process.nextTick(() => console.log('NextTick callback'));
+
+console.log('End');
+
+```
+</details>
+
+<details>
+<summary>2.6 Convert a callback-based function into a Promise-based one.</summary>
+
+```js
+const fs = require('fs');
+const util = require('util');
+const readFile = util.promisify(fs.readFile);
+
+readFile('example.txt', 'utf8')
+  .then(data => console.log('Promisified read:', data))
+  .catch(console.error);
+```
+</details>
+
+<details>
+<summary>2.7 Sequential vs. Parallel Async Tasks</summary>
+
+```js
+const delay = ms => new Promise(res => setTimeout(res, ms));
+
+async function sequential() {
+  console.time('sequential');
+  await delay(1000);
+  await delay(1000);
+  console.timeEnd('sequential');
+}
+
+async function parallel() {
+  console.time('parallel');
+  await Promise.all([delay(1000), delay(1000)]);
+  console.timeEnd('parallel');
+}
+
+sequential().then(parallel);
+```
+</details>
+
+<details>
+<summary>2.8 Async Iteration with for await...of</summary>
+
+```js
+const { Readable } = require('stream');
+
+async function* generate() {
+  for (let i = 1; i <= 3; i++) {
+    await new Promise(r => setTimeout(r, 500));
+    yield i;
+  }
+}
+
+(async () => {
+  for await (const num of generate()) {
+    console.log('Number:', num);
   }
 })();
 ```
 </details>
 
 <details>
-<summary>2.23 Worker Threads</summary>
+<summary>2.9 Streaming File Read (Backpressure Demo)</summary>
 
 ```js
+const fs = require('fs');
+
+const stream = fs.createReadStream('bigfile.txt', { encoding: 'utf8' });
+stream.on('data', chunk => console.log('Chunk length:', chunk.length));
+stream.on('end', () => console.log('Stream finished'));
+```
+</details>
+
+<details>
+<summary>2.10 Using Promise.race</summary>
+
+```js
+const slow = new Promise(res => setTimeout(() => res('slow done'), 2000));
+const fast = new Promise(res => setTimeout(() => res('fast done'), 500));
+
+Promise.race([slow, fast]).then(result => console.log('Winner:', result));
+```
+</details>
+
+<details>
+<summary>2.11 Worker Threads for CPU-bound Tasks</summary>
+
+```js
+// worker.js
+const { parentPort } = require('worker_threads');
+let sum = 0;
+for (let i = 0; i < 1e8; i++) sum += i;
+parentPort.postMessage(sum);
+
+// main.js
 const { Worker } = require('worker_threads');
-new Worker('console.log("worker")',{eval:true});
+new Worker('./worker.js').on('message', msg => console.log('Sum:', msg));
+
 ```
 </details>
 
 <details>
-<summary>2.24 Timers Promises</summary>
+<summary>2.12 Abortable Fetch with AbortController</summary>
 
 ```js
-const { setTimeout } = require('timers/promises');
-await setTimeout(500);
-console.log('done');
-```
-</details>
-
-<details>
-<summary>2.25 Async Generator</summary>
-
-```js
-async function* gen(){
-  yield await Promise.resolve(1);
-  yield 2;
-}
-for await(const x of gen()) console.log(x);
-```
-</details>
-
-<details>
-<summary>2.26 Pipeline Promises</summary>
-
-```js
-const {pipeline} = require('stream/promises');
-await pipeline(fs.createReadStream('a.txt'), fs.createWriteStream('b.txt'));
-```
-</details>
-
-<details>
-<summary>2.27 callbackify</summary>
-
-```js
-const {callbackify} = require('util');
-const fn = async ()=>'done';
-callbackify(fn)((err,res)=>console.log(res));
-```
-</details>
-
-<details>
-<summary>2.28 AbortController</summary>
-
-```js
+const fetch = require('node-fetch'); // npm i node-fetch
 const controller = new AbortController();
-fetch('https://example.com',{signal:controller.signal});
-controller.abort();
+const signal = controller.signal;
+
+setTimeout(() => controller.abort(), 1000); // cancel after 1s
+
+fetch('https://httpbin.org/delay/5', { signal })
+  .then(res => res.text())
+  .then(console.log)
+  .catch(err => console.error('Fetch aborted:', err.name));
+
 ```
 </details>
 
 <details>
-<summary>2.29 Semaphore</summary>
+<summary>2.13 fDelayed Retry with Async Function</summary>
 
 ```js
-class Semaphore {
-  constructor(n){this.n=n; this.q=[];}
-  async acquire(){
-    if(this.n>0){this.n--; return;}
-    await new Promise(r=>this.q.push(r));
-  }
-  release(){
-    this.n++;
-    if(this.q.length) this.q.shift()();
+async function retry(fn, retries = 3, delay = 500) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await fn();
+    } catch (err) {
+      console.log(`Attempt ${i + 1} failed`);
+      if (i < retries - 1) await new Promise(r => setTimeout(r, delay));
+    }
   }
 }
+
+retry(() => Promise.reject('Fail')).catch(err => console.error('All attempts failed:', err));
 ```
 </details>
 
 <details>
-<summary>2.30 Async Queue with setTimeout</summary>
+<summary>2.14 Async Map with Promise.all</summary>
 
 ```js
-const tasks=[1,2,3];
-function runQueue(){
-  if(!tasks.length) return;
-  console.log(tasks.shift());
-  setTimeout(runQueue,200);
+async function asyncDouble(n) {
+  return new Promise(res => setTimeout(() => res(n * 2), 300));
 }
-runQueue();
+
+async function run() {
+  const numbers = [1, 2, 3];
+  const doubled = await Promise.all(numbers.map(asyncDouble));
+  console.log('Doubled:', doubled);
+}
+
+run();
+```
+</details>
+
+<details>
+<summary>2.15 Async Filter Example</summary>
+
+```js
+async function isEvenAsync(n) {
+  await new Promise(r => setTimeout(r, 100));
+  return n % 2 === 0;
+}
+
+async function filterAsync(arr, fn) {
+  const results = await Promise.all(arr.map(fn));
+  return arr.filter((_, i) => results[i]);
+}
+
+filterAsync([1,2,3,4,5], isEvenAsync).then(console.log); // [2,4]
+
+```
+</details>
+
+<details>
+<summary>2.16 Async Reduce Example</summary>
+
+```js
+async function sumAsync(arr) {
+  let total = 0;
+  for (const num of arr) {
+    total += await Promise.resolve(num);
+  }
+  return total;
+}
+
+sumAsync([1,2,3,4]).then(console.log); // 10
+
+```
+</details>
+
+<details>
+<summary>2.17 Timeout Wrapper for Async Functions</summary>
+
+```js
+function withTimeout(fn, ms) {
+  return Promise.race([
+    fn(),
+    new Promise((_, rej) => setTimeout(() => rej(new Error('Timeout')), ms))
+  ]);
+}
+
+withTimeout(() => new Promise(res => setTimeout(() => res('Done'), 2000)), 1000)
+  .then(console.log)
+  .catch(err => console.error(err.message)); // Timeout
+
 ```
 </details>
 
