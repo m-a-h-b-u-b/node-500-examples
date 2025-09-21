@@ -623,37 +623,152 @@ app.listen(3000, () => console.log('API ready on http://localhost:3000'));
 
 
 <details>
-<summary>Routing</summary>
+<summary>3.3 Using custom middleware for request logging</summary>
 
 ```js
-app.get('/user/:id', (req, res) => {
-  res.send(`User ID: ${req.params.id}`);
+const express = require('express');
+const app = express();
+
+// Custom middleware
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
 });
+
+app.get('/', (req, res) => res.send('Middleware in action!'));
+
+app.listen(3000, () => console.log('Server running with middleware'));
+
 ```
 
 </details>
 
 
 <details>
-<summary>Routing</summary>
+<summary>3.4 Serving Static Files</summary>
 
 ```js
-app.get('/user/:id', (req, res) => {
-  res.send(`User ID: ${req.params.id}`);
-});
+const express = require('express');
+const path = require('path');
+const app = express();
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.listen(3000, () => console.log('Static server at http://localhost:3000'));
+
 ```
 
 </details>
 
 
 <details>
-<summary>Routing</summary>
+<summary>3.5 Handling dynamic URL segments and query parameters.</summary>
 
 ```js
+const express = require('express');
+const app = express();
+
 app.get('/user/:id', (req, res) => {
-  res.send(`User ID: ${req.params.id}`);
+  const { id } = req.params;
+  const { search } = req.query; // e.g. /user/42?search=books
+  res.send(`User ID: ${id}, Search: ${search || 'none'}`);
 });
+
+app.listen(3000, () => console.log('Listening on http://localhost:3000'));
+
 ```
+
+</details>
+
+
+</details>
+
+
+<details>
+
+<summary>3.6 Error Handling Middleware</summary>
+
+```js
+const express = require('express');
+const app = express();
+
+app.get('/fail', (req, res, next) => {
+  const err = new Error('Something went wrong!');
+  err.status = 500;
+  next(err);
+});
+
+// Error handler
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json({ message: err.message });
+});
+
+app.listen(3000, () => console.log('Error handling example running'));
+
+```
+
+</details>
+
+</details>
+
+
+<details>
+<summary>3.7 File Upload with Multer</summary>
+
+```js
+const express = require('express');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+const app = express();
+
+app.post('/upload', upload.single('file'), (req, res) => {
+  res.send(`File uploaded: ${req.file.originalname}`);
+});
+
+app.listen(3000, () => console.log('Upload server ready at /upload'));
+
+```
+
+</details>
+
+</details>
+
+
+<details>
+<summary>3.8 JWT Authentication</summary>
+
+```js
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const app = express();
+app.use(express.json());
+
+const SECRET = 'mysecret';
+
+// Login to get token
+app.post('/login', (req, res) => {
+  const user = { id: 1, name: 'Alice' };
+  const token = jwt.sign(user, SECRET, { expiresIn: '1h' });
+  res.json({ token });
+});
+
+// Protected route
+app.get('/profile', (req, res) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) return res.sendStatus(401);
+
+  jwt.verify(token, SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    res.json({ message: 'Welcome!', user });
+  });
+});
+
+app.listen(3000, () => console.log('JWT example running on /login and /profile'));
+
+```
+
+</details>
 
 </details>
 
@@ -668,7 +783,6 @@ app.get('/user/:id', (req, res) => {
 <summary>MongoDB with Mongoose</summary>
 
 ```js
-// Example 1: Connect to MongoDB
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/mydb');
 ```
@@ -679,7 +793,6 @@ mongoose.connect('mongodb://localhost:27017/mydb');
 <summary>PostgreSQL (pg)</summary>
 
 ```js
-// Example 2: Simple query
 const { Client } = require('pg');
 const client = new Client();
 await client.connect();
