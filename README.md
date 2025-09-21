@@ -20,7 +20,7 @@ Perfect for learners, teachers, and professionals. Contributions welcome!
 
 ---
 
-<a id="#1-basic-concepts--core-modules"></a>
+<a id="1-basic-concepts--core-modules"></a>
 ## 1. Basic Concepts & Core Modules (≈50 Examples)
 
 <details>
@@ -243,7 +243,7 @@ dns.lookup('example.com', (err, address) => {
 [Return to Table of Contents](#table-of-contents)
 ---
 
-<a id="#2-asynchronous-programming"></a>
+<a id="2-asynchronous-programming"></a>
 ## 2. Asynchronous Programming (≈50 Examples)
 
 <details>
@@ -572,7 +572,7 @@ runQueue();
 [Return to Table of Contents](#table-of-contents)
 ---
 
-<a id="#3-web-development-with-expressjs"></a>
+<a id="3-web-development-with-expressjs"></a>
 ## 3. Web Development with Express.js (≈80 Examples)
 
 <details>
@@ -780,7 +780,7 @@ app.listen(3000, () => console.log('JWT example running on /login and /profile')
 [Return to Table of Contents](#table-of-contents)
 ---
 
-<a id="#4-databases"></a>
+<a id="4-databases"></a>
 ## 4. Databases (≈50 Examples)
 
 <details>
@@ -811,7 +811,7 @@ console.log(res.rows[0]);
 [Return to Table of Contents](#table-of-contents)
 ---
 
-<a id="#5-real-time-applications"></a>
+<a id="5-real-time-applications"></a>
 ## 5. Real-time Applications (≈40 Examples)
 
 <details>
@@ -843,7 +843,7 @@ app.get('/events', (req, res) => {
 [Return to Table of Contents](#table-of-contents)
 ---
 
-<a id="#6-advanced-topics"></a>
+<a id="6-advanced-topics"></a>
 ## 6. Advanced Topics (≈60 Examples)
 
 <details>
@@ -881,7 +881,7 @@ ls.stdout.on('data', data => console.log(`Output: ${data}`));
 [Return to Table of Contents](#table-of-contents)
 ---
 
-<a id="#7-practical-projects--utilities"></a>
+<a id="7-practical-projects--utilities"></a>
 ## 7. Practical Projects & Utilities (≈100+ Examples)
 
 <details>
@@ -912,6 +912,7 @@ transporter.sendMail({ from:'you@domain.com', to:'user@domain.com', subject:'Tes
 [Return to Table of Contents](#table-of-contents)
 ---
 
+<a id="8-Contribution-guide"></a>
 ## 8. Contribution Guide
 
 We welcome contributions! To add new examples:  
