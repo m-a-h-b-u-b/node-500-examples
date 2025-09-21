@@ -784,29 +784,109 @@ app.listen(3000, () => console.log('JWT example running on /login and /profile')
 ## 4. Databases (≈50 Examples)
 
 <details>
-<summary>MongoDB with Mongoose</summary>
+<summary>4.1 MongoDB with Mongoose</summary>
 
 ```js
+// Install: npm i mongoose
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/mydb');
+
+mongoose.connect('mongodb://127.0.0.1:27017/mydb');
+
+const User = mongoose.model('User', new mongoose.Schema({ name: String }));
+
+(async () => {
+  const user = await User.create({ name: 'Alice' });
+  console.log('Saved:', user);
+  const all = await User.find();
+  console.log('All users:', all);
+})();
+
 ```
 
 </details>
 
 <details>
-<summary>PostgreSQL (pg)</summary>
+<summary>4.2 PostgreSQL with pg</summary>
 
 ```js
+// Install: npm i pg
 const { Client } = require('pg');
-const client = new Client();
-await client.connect();
-const res = await client.query('SELECT NOW()');
-console.log(res.rows[0]);
+
+const client = new Client({
+  connectionString: 'postgresql://postgres:password@localhost:5432/mydb'
+});
+
+(async () => {
+  await client.connect();
+  const res = await client.query('SELECT NOW() AS current_time');
+  console.log(res.rows[0]);
+  await client.end();
+})();
+
 ```
 
 </details>
 
-<!-- Add MySQL and other DB examples -->
+<details>
+<summary>4.3 MySQL with mysql2</summary>
+
+```js
+// Install: npm i mysql2
+const mysql = require('mysql2/promise');
+
+(async () => {
+  const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'test' });
+  const [rows] = await conn.execute('SELECT 1 + 1 AS result');
+  console.log('Query result:', rows[0].result);
+  await conn.end();
+})();
+
+```
+
+</details>
+
+<details>
+<summary>P4.4 SQLite with better-sqlite3</summary>
+
+```js
+// Install: npm i better-sqlite3
+const Database = require('better-sqlite3');
+const db = new Database('example.db');
+
+db.prepare('CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY, text TEXT)').run();
+db.prepare('INSERT INTO notes (text) VALUES (?)').run('Hello SQLite');
+const rows = db.prepare('SELECT * FROM notes').all();
+console.log(rows);
+
+```
+
+</details>
+
+<details>
+<summary>4.5 Redis with redis</summary>
+
+```js
+// Install: npm i redis
+const { createClient } = require('redis');
+
+(async () => {
+  const client = createClient();
+  await client.connect();
+
+  await client.set('greeting', 'Hello Redis!');
+  const val = await client.get('greeting');
+  console.log('Stored value:', val);
+
+  await client.quit();
+})();
+
+```
+
+</details>
+
+
+
+
 
 [Return to Table of Contents](#table-of-contents)
 ---
