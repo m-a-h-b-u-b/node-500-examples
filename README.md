@@ -3,7 +3,7 @@
 A massive collection of **500+ practical Node.js examples**, covering everything from basic concepts and core modules to advanced topics, real-time applications, databases, and practical projects.  
 Perfect for learners, teachers, and professionals. Contributions welcome!
 
-**Current Progress:** 83/500 examples completed ✅
+**Current Progress:** 98/500 examples completed ✅
 
 ---
 
@@ -1507,8 +1507,239 @@ console.log('Memory Usage:', process.memoryUsage());
 
 </details>
 
+<details>
+<summary>6.18 Event Loop Delay Monitoring</summary>
 
-<!-- Add remaining advanced examples -->
+```js
+const { monitorEventLoopDelay } = require('perf_hooks');
+const h = monitorEventLoopDelay();
+h.enable();
+
+setTimeout(() => {
+  h.disable();
+  console.log('Event Loop Delay (ms):', h.mean / 1e6);
+}, 1000);
+
+```
+
+</details>
+
+<details>
+<summary>6.19 HTTP2 Server for multiplexed connections</summary>
+
+```js
+const http2 = require('http2');
+const fs = require('fs');
+
+const server = http2.createSecureServer({
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem')
+});
+
+server.on('stream', (stream) => {
+  stream.respond({ ':status': 200 });
+  stream.end('Hello HTTP2');
+});
+
+server.listen(3000);
+
+```
+
+</details>
+
+<details>
+<summary>6.20 Dynamic Module Loading</summary>
+
+```js
+(async () => {
+  const moduleName = './myModule.js';
+  const mod = await import(moduleName);
+  mod.run();
+})();
+
+```
+
+</details>
+
+<details>
+<summary>6.21 Custom Writable Stream</summary>
+
+```js
+const { Writable } = require('stream');
+
+const writer = new Writable({
+  write(chunk, enc, cb) {
+    console.log('Chunk:', chunk.toString());
+    cb();
+  }
+});
+
+process.stdin.pipe(writer);
+
+```
+
+</details>
+
+
+<details>
+<summary>6.22 Custom Readable Stream</summary>
+
+```js
+const { Readable } = require('stream');
+
+const readable = new Readable({
+  read(size) {
+    this.push('Data chunk\n');
+    this.push(null);
+  }
+});
+
+readable.pipe(process.stdout);
+```
+
+</details>
+
+<details>
+<summary>6.23 Native Addons - Integrate C++ for performance-critical logic</summary>
+
+```js
+// Example: simple native addon
+// In C++ create addon.cc
+// compile with node-gyp and require in JS
+const addon = require('./build/Release/addon');
+console.log(addon.hello());
+
+```
+
+</details>
+
+<details>
+<summary>6.24 Cluster with Round-Robin Load Balancing</summary>
+
+```js
+const cluster = require('cluster');
+const http = require('http');
+if(cluster.isPrimary){
+  for(let i=0;i<2;i++) cluster.fork();
+} else {
+  http.createServer((req,res)=>res.end(`Handled by ${process.pid}`)).listen(3000);
+}
+
+```
+
+</details>
+
+<details>
+<summary>6.25 Redis Caching Example</summary>
+
+```js
+const redis = require('redis');
+const client = redis.createClient();
+await client.connect();
+
+await client.set('name', 'NodeJS');
+const value = await client.get('name');
+console.log(value);
+
+```
+
+</details>
+
+<details>
+<summary>6.26 Rate Limiting Middleware - Protect APIs from excessive requests.</summary>
+
+```js
+const rateLimit = require('express-rate-limit');
+const limiter = rateLimit({ windowMs: 60000, max: 10 });
+app.use(limiter);
+
+```
+
+</details>
+
+<details>
+<summary>6.27 Graceful Shutdown of Servers</summary>
+
+```js
+const server = require('http').createServer();
+server.listen(3000);
+process.on('SIGTERM', () => {
+  server.close(() => console.log('Server shut down gracefully'));
+});
+
+```
+
+</details>
+
+<details>
+<summary>6.28 JWT Token Refresh Example</summary>
+
+```js
+const jwt = require('jsonwebtoken');
+const refreshToken = jwt.sign({ id:1 }, 'secret', { expiresIn:'7d' });
+
+```
+
+</details>
+
+<details>
+<summary>6.29 Cluster with Health Checks</summary>
+
+```js
+const cluster = require('cluster');
+if(cluster.isPrimary){
+  const worker = cluster.fork();
+  setInterval(()=>worker.isConnected() && console.log('Worker healthy'), 1000);
+}
+
+```
+
+</details>
+
+<details>
+<summary>6.30 Dynamic API Mocking</summary>
+
+```js
+const express = require('express');
+const app = express();
+app.get('/api/:resource', (req,res)=>res.json({ resource:req.params.resource }));
+app.listen(3000);
+
+```
+
+</details>
+
+<details>
+<summary>6.31 Microservice Communication with NATS</summary>
+
+```js
+const { connect } = require('nats');
+(async () => {
+  const nc = await connect({ servers: 'nats://localhost:4222' });
+  nc.subscribe('updates', msg => console.log('Received:', msg));
+})();
+
+```
+
+</details>
+
+<details>
+<summary>6.32 Node.js Performance Hooks</summary>
+
+```js
+const { performance, PerformanceObserver } = require('perf_hooks');
+
+const obs = new PerformanceObserver((items) => console.log(items.getEntries()));
+obs.observe({ entryTypes: ['measure'] });
+
+performance.mark('start');
+for(let i=0;i<1e6;i++){}
+performance.mark('end');
+performance.measure('loop', 'start', 'end');
+
+```
+
+</details>
 
 [Return to Table of Contents](#table-of-contents)
 ---
