@@ -3,7 +3,7 @@
 A massive collection of **500+ practical Node.js examples**, covering everything from basic concepts and core modules to advanced topics, real-time applications, databases, and practical projects.  
 Perfect for learners, teachers, and professionals. Contributions welcome!
 
-**Current Progress:** 60/500 examples completed ✅
+**Current Progress:** 72/500 examples completed ✅
 
 ---
 
@@ -885,6 +885,104 @@ const { createClient } = require('redis');
 </details>
 
 
+<details>
+<summary>4.6 MariaDB with mariadb</summary>
+
+```js
+// Install: npm i mariadb
+const mariadb = require('mariadb');
+
+(async () => {
+  const pool = mariadb.createPool({ host: 'localhost', user: 'root', password: '', database: 'test' });
+  const conn = await pool.getConnection();
+  const rows = await conn.query('SELECT NOW() AS time');
+  console.log('Current time:', rows[0].time);
+  conn.release();
+  pool.end();
+})();
+
+```
+
+</details>
+
+<details>
+<summary>4.7 CouchDB with nano</summary>
+
+```js
+// Install: npm i nano
+const nano = require('nano')('http://admin:password@localhost:5984');
+
+(async () => {
+  const db = nano.db.use('mydb');
+  await db.insert({ type: 'note', text: 'Hello CouchDB' }, 'note1');
+  const doc = await db.get('note1');
+  console.log('Fetched doc:', doc);
+})();
+
+```
+
+</details>
+
+
+<details>
+<summary>4.8 Cassandra with cassandra-driver</summary>
+
+```js
+// Install: npm i cassandra-driver
+const cassandra = require('cassandra-driver');
+
+(async () => {
+  const client = new cassandra.Client({ contactPoints: ['127.0.0.1'], localDataCenter: 'datacenter1', keyspace: 'test' });
+  const result = await client.execute('SELECT release_version FROM system.local');
+  console.log('Cassandra version:', result.rows[0].release_version);
+  await client.shutdown();
+})();
+
+```
+
+</details>
+
+
+<details>
+<summary>4.9 Oracle Database with oracledb</summary>
+
+```js
+// Install: npm i oracledb
+const oracledb = require('oracledb');
+
+(async () => {
+  const conn = await oracledb.getConnection({ user: 'system', password: 'password', connectionString: 'localhost/XE' });
+  const result = await conn.execute('SELECT SYSDATE FROM dual');
+  console.log('Current date:', result.rows[0][0]);
+  await conn.close();
+})();
+
+```
+
+</details>
+
+
+<details>
+<summary>4.10 Firebase Realtime Database</summary>
+
+```js
+// Install: npm i firebase
+import { initializeApp } from 'firebase/app';
+import { getDatabase, ref, set, get } from 'firebase/database';
+
+const firebaseConfig = { /* your config */ };
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+(async () => {
+  await set(ref(db, 'messages/msg1'), { text: 'Hello Firebase' });
+  const snapshot = await get(ref(db, 'messages/msg1'));
+  console.log('Data:', snapshot.val());
+})();
+
+```
+
+</details>
 
 
 
