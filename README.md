@@ -993,30 +993,134 @@ const db = getDatabase(app);
 ## 5. Real-time Applications (≈40 Examples)
 
 <details>
-<summary>WebSocket with Socket.IO</summary>
+<summary>5.1 Chat App with Socket.IO</summary>
 
 ```js
-// Example: Simple chat server
-const io = require('socket.io')(3000);
+// Install: npm i express socket.io
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
 io.on('connection', socket => {
-  socket.on('message', msg => io.emit('message', msg));
+  console.log('User connected');
+  socket.on('chat message', msg => io.emit('chat message', msg));
 });
+
+server.listen(3000, () => console.log('Chat server on http://localhost:3000'));
+
 ```
 
 </details>
 
 <details>
-<summary>Server-Sent Events (SSE)</summary>
+<summary>5.2 Live Stock Prices via WebSockets</summary>
 
 ```js
-// Example: SSE endpoint
-app.get('/events', (req, res) => {
-  res.setHeader('Content-Type', 'text/event-stream');
-  setInterval(() => res.write(`data: ${new Date()}\n\n`), 1000);
-});
+// Install: npm i ws
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 8080 });
+
+setInterval(() => {
+  const price = (100 + Math.random() * 10).toFixed(2);
+  wss.clients.forEach(client => client.send(JSON.stringify({ symbol: 'AAPL', price })));
+}, 2000);
+
+console.log('Stock price server running on ws://localhost:8080');
+
 ```
 
 </details>
+
+<details>
+<summary>5.3 Real-time Notifications with Redis Pub/Sub</summary>
+
+```js
+// Install: npm i express socket.io redis
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+const { createClient } = require('redis');
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+const subscriber = createClient();
+
+(async () => {
+  await subscriber.connect();
+  await subscriber.subscribe('notifications', msg => io.emit('notify', msg));
+})();
+
+server.listen(4000, () => console.log('Notifications server running'));
+
+```
+
+</details>
+
+
+<details>
+<summary>5.4 Collaborative Whiteboard with WebSockets</summary>
+
+```js
+// Install: npm i express ws
+const express = require('express');
+const http = require('http');
+const WebSocket = require('ws');
+
+const app = express();
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', ws =>
+  ws.on('message', data =>
+    wss.clients.forEach(client => client.send(data))
+  )
+);
+
+server.listen(3001, () => console.log('Whiteboard server running'));
+
+```
+
+</details>
+
+
+<details>
+<summary>5.5 Multiplayer Game Server with Socket.IO</summary>
+
+```js
+// Install: npm i express socket.io
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
+let players = {};
+
+io.on('connection', socket => {
+  players[socket.id] = { x: 0, y: 0 };
+  socket.emit('init', players);
+
+  socket.on('move', data => {
+    players[socket.id] = data;
+    io.emit('update', players);
+  });
+
+  socket.on('disconnect', () => delete players[socket.id]);
+});
+
+server.listen(5000, () => console.log('Game server running'));
+
+```
+
+</details>
+
 
 [Return to Table of Contents](#table-of-contents)
 ---
