@@ -3,7 +3,7 @@
 A massive collection of **500+ practical Node.js examples**, covering everything from basic concepts and core modules to advanced topics, real-time applications, databases, and practical projects.  
 Perfect for learners, teachers, and professionals. Contributions welcome!
 
-**Current Progress:** 72/500 examples completed ✅
+**Current Progress:** 75/500 examples completed ✅
 
 ---
 
@@ -21,7 +21,7 @@ Perfect for learners, teachers, and professionals. Contributions welcome!
 ---
 
 <a id="1-basic-concepts--core-modules"></a>
-## 1. Basic Concepts & Core Modules (≈50 Examples)
+## 1. Basic Concepts & Core Modules 
 
 <details>
 <summary>1.1 Hello World Examples</summary>
@@ -244,7 +244,7 @@ dns.lookup('example.com', (err, address) => {
 ---
 
 <a id="2-asynchronous-programming"></a>
-## 2. Asynchronous Programming (≈50 Examples)
+## 2. Asynchronous Programming 
 
 <details>
 <summary>2.1 setTimeout Basic</summary>
@@ -573,7 +573,7 @@ runQueue();
 ---
 
 <a id="3-web-development-with-expressjs"></a>
-## 3. Web Development with Express.js (≈80 Examples)
+## 3. Web Development with Express.js 
 
 <details>
 <summary>3.1 A simple Express.js server that responds with "Hello World"</summary>
@@ -781,7 +781,7 @@ app.listen(3000, () => console.log('JWT example running on /login and /profile')
 ---
 
 <a id="4-databases"></a>
-## 4. Databases (≈50 Examples)
+## 4. Databases 
 
 <details>
 <summary>4.1 MongoDB with Mongoose</summary>
@@ -990,7 +990,7 @@ const db = getDatabase(app);
 ---
 
 <a id="5-real-time-applications"></a>
-## 5. Real-time Applications (≈40 Examples)
+## 5. Real-time Applications 
 
 <details>
 <summary>5.1 Chat App with Socket.IO</summary>
@@ -1126,7 +1126,7 @@ server.listen(5000, () => console.log('Game server running'));
 ---
 
 <a id="6-advanced-topics"></a>
-## 6. Advanced Topics (≈60 Examples)
+## 6. Advanced Topics 
 
 <details>
 <summary>Clustering</summary>
@@ -1164,7 +1164,7 @@ ls.stdout.on('data', data => console.log(`Output: ${data}`));
 ---
 
 <a id="7-practical-projects--utilities"></a>
-## 7. Practical Projects & Utilities (≈100+ Examples)
+## 7. Practical Projects & Utilities 
 
 <details>
 <summary>Command Line Tool</summary>
