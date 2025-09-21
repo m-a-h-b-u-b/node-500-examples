@@ -3,7 +3,7 @@
 A massive collection of **500+ practical Node.js examples**, covering everything from basic concepts and core modules to advanced topics, real-time applications, databases, and practical projects.  
 Perfect for learners, teachers, and professionals. Contributions welcome!
 
-**Current Progress:** 75/500 examples completed ✅
+**Current Progress:** 81/500 examples completed ✅
 
 ---
 
@@ -1119,6 +1119,146 @@ server.listen(5000, () => console.log('Game server running'));
 
 ```
 
+</details>
+
+
+
+<details>
+<summary>5.6 Multiplayer Game Server with Socket.IO</summary>
+
+```js
+// Install: npm i express socket.io
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
+io.on('connection', socket => {
+  socket.on('location', coords => {
+    // broadcast updated GPS coordinates to all clients
+    io.emit('location-update', coords);
+  });
+});
+
+server.listen(3002, () => console.log('Location tracking server running'));
+
+```
+</details>
+
+<details>
+<summary>5.7 Server-Sent Events (SSE) Live Feed</summary>
+
+```js
+// No extra package required
+const express = require('express');
+const app = express();
+
+app.get('/stream', (req, res) => {
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive'
+  });
+  setInterval(() => {
+    res.write(`data: ${new Date().toISOString()}\n\n`);
+  }, 1000);
+});
+
+app.listen(3003, () => console.log('SSE server on http://localhost:3003/stream'));
+
+```
+</details>
+
+<details>
+<summary>5.8 MQTT IoT Sensor Stream</summary>
+
+```js
+// Install: npm i mqtt
+const mqtt = require('mqtt');
+const client = mqtt.connect('mqtt://test.mosquitto.org');
+
+client.on('connect', () => {
+  setInterval(() => {
+    const temp = (20 + Math.random() * 5).toFixed(1);
+    client.publish('sensors/temperature', temp);
+  }, 3000);
+});
+
+client.on('message', (topic, msg) => console.log(topic, msg.toString()));
+client.subscribe('sensors/temperature');
+
+```
+</details>
+
+<details>
+<summary>5.9 Real-Time Collaboration with Yjs + WebSocket</summary>
+
+```js
+// Install: npm i express ws y-websocket
+const http = require('http');
+const WebSocket = require('ws');
+const setupWSConnection = require('y-websocket/bin/utils').setupWSConnection;
+
+const server = http.createServer();
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', (ws, req) => {
+  setupWSConnection(ws, req);
+});
+
+server.listen(1234, () => console.log('Yjs collaborative editing server running'));
+
+```
+</details>
+
+<details>
+<summary>5.10 GraphQL Subscriptions (Apollo Server)</summary>
+
+```js
+// Install: npm i apollo-server graphql graphql-subscriptions
+const { ApolloServer, gql, PubSub } = require('apollo-server');
+const pubsub = new PubSub();
+
+const typeDefs = gql`
+  type Query { _: Boolean }
+  type Subscription { time: String }
+`;
+
+const resolvers = {
+  Subscription: {
+    time: { subscribe: () => setInterval(() => pubsub.publish('TIME', { time: new Date().toISOString() }), 1000) || pubsub.asyncIterator('TIME') }
+  }
+};
+
+new ApolloServer({ typeDefs, resolvers }).listen(4000, () =>
+  console.log('GraphQL subscription server running')
+);
+
+```
+</details>
+
+<details>
+<summary>5.11 Kafka Real-Time Stream Consumer</summary>
+
+```js
+// Install: npm i kafkajs
+const { Kafka } = require('kafkajs');
+const kafka = new Kafka({ brokers: ['localhost:9092'] });
+const consumer = kafka.consumer({ groupId: 'realtime-group' });
+
+(async () => {
+  await consumer.connect();
+  await consumer.subscribe({ topic: 'events' });
+  await consumer.run({
+    eachMessage: async ({ topic, message }) =>
+      console.log(`Received: ${message.value.toString()}`)
+  });
+})();
+
+```
 </details>
 
 
