@@ -3,7 +3,7 @@
 A massive collection of **500+ practical Node.js examples**, covering everything from basic concepts and core modules to advanced topics, real-time applications, databases, and practical projects.  
 Perfect for learners, teachers, and professionals. Contributions welcome!
 
-**Current Progress:** 68/500 examples completed ✅
+**Current Progress:** 83/500 examples completed ✅
 
 ---
 
@@ -1234,7 +1234,7 @@ const consumer = kafka.consumer({ groupId: 'realtime-group' });
 ## 6. Advanced Topics 
 
 <details>
-<summary>Clustering</summary>
+<summary>6.1 Clustering</summary>
 
 ```js
 // Example: Basic cluster setup
@@ -1252,7 +1252,7 @@ if (cluster.isMaster) {
 </details>
 
 <details>
-<summary>Child Processes</summary>
+<summary>6.2 Child Processes</summary>
 
 ```js
 // Example: Spawn child process
@@ -1262,6 +1262,251 @@ ls.stdout.on('data', data => console.log(`Output: ${data}`));
 ```
 
 </details>
+
+<details>
+<summary>6.3 Worker Threads - Offload CPU-intensive tasks to a separate thread.</summary>
+
+```js
+const { Worker, isMainThread, parentPort } = require('worker_threads');
+
+if (isMainThread) {
+  const worker = new Worker(__filename);
+  worker.on('message', msg => console.log('From worker:', msg));
+} else {
+  parentPort.postMessage('Hello from worker thread!');
+}
+```
+
+</details>
+
+<details>
+<summary>6.4 Event Loop Monitoring - Measure performance of code sections in Node.js. </summary>
+
+```js
+const { performance, PerformanceObserver } = require('perf_hooks');
+
+const obs = new PerformanceObserver((items) => console.log(items.getEntries()));
+obs.observe({ entryTypes: ['measure'] });
+
+performance.mark('A');
+// Simulate heavy task
+for (let i = 0; i < 1e6; i++) {}
+performance.mark('B');
+performance.measure('Loop duration', 'A', 'B');
+```
+
+</details>
+
+<details>
+<summary>Advanced HTTP/2 Server - for improved speed and multiplexing.</summary>
+
+```js
+const http2 = require('http2');
+const server = http2.createServer((req, res) => {
+  res.end('Hello HTTP/2');
+});
+
+server.listen(3000, () => console.log('HTTP/2 server running on port 3000'));
+```
+
+</details>
+
+<details>
+<summary>6.6 Native Addons with N-API - Integrate C/C++ modules for performance-critical operations.</summary>
+
+```js
+// Example assumes pre-built native addon: myaddon.node
+const addon = require('./build/Release/myaddon.node');
+console.log('Result from native addon:', addon.hello());
+```
+
+</details>
+
+<details>
+<summary>6.7 Dynamic Module Import</summary>
+
+```js
+(async () => {
+  const { join } = await import('path');
+  console.log(join('folder', 'file.txt'));
+})();
+```
+
+</details>
+
+<details>
+<summary>6.8 Buffer Manipulation</summary>
+
+```js
+const buf = Buffer.from('Hello Node.js');
+console.log(buf.toString());       // Output: Hello Node.js
+console.log(buf.toJSON());         // Output: JSON representation
+
+```
+
+</details>
+
+<details>
+<summary>6.9 Stream Piping with Backpressure </summary>
+
+```js
+const fs = require('fs');
+const zlib = require('zlib');
+
+fs.createReadStream('input.txt')
+  .pipe(zlib.createGzip())
+  .pipe(fs.createWriteStream('input.txt.gz'));
+
+```
+
+</details>
+
+<details>
+<summary>6.10 Advanced Clustering with Sticky Sessions - se sticky sessions to distribute TCP connections across cluster workers.</summary>
+
+```js
+const cluster = require('cluster');
+const http = require('http');
+const net = require('net');
+
+if (cluster.isMaster) {
+  const workers = [];
+  const numCPUs = require('os').cpus().length;
+  for (let i = 0; i < numCPUs; i++) workers.push(cluster.fork());
+
+  const server = net.createServer({ pauseOnConnect: true }, (socket) => {
+    const worker = workers[socket.remotePort % numCPUs];
+    worker.send('socket', socket);
+  });
+  server.listen(3000);
+} else {
+  process.on('message', (msg, socket) => {
+    if (msg === 'socket') {
+      socket.resume();
+      socket.end('Handled by worker ' + process.pid);
+    }
+  });
+}
+
+```
+
+</details>
+
+<details>
+<summary>6.11 Process Signals Handling </summary>
+
+```js
+process.on('SIGINT', () => {
+  console.log('Received SIGINT. Exiting gracefully.');
+  process.exit(0);
+});
+
+```
+
+</details>
+
+<details>
+<summary>6.12 High-Resolution Timers - Benchmark critical sections with millisecond precision. </summary>
+
+```js
+const { performance } = require('perf_hooks');
+const start = performance.now();
+for(let i=0;i<1e6;i++){}
+console.log('Loop took:', performance.now() - start, 'ms');
+
+```
+
+</details>
+
+<details>
+<summary>6.13 Worker Pool Example </summary>
+
+```js
+const { Worker } = require('worker_threads');
+
+function runTask(task) {
+  return new Promise((resolve, reject) => {
+    const worker = new Worker('./worker.js', { workerData: task });
+    worker.on('message', resolve);
+    worker.on('error', reject);
+  });
+}
+
+(async () => {
+  const result = await runTask({ number: 42 });
+  console.log(result);
+})();
+
+```
+
+</details>
+
+<details>
+<summary>6.14 Advanced EventEmitter Patterns </summary>
+
+```js
+const { EventEmitter } = require('events');
+
+class MyEmitter extends EventEmitter {
+  async emitAsync(event, ...args) {
+    const listeners = this.listeners(event);
+    for(const listener of listeners) await listener(...args);
+  }
+}
+
+const emitter = new MyEmitter();
+emitter.on('data', async msg => console.log('Received:', msg));
+emitter.emitAsync('data', 'Hello Advanced');
+
+```
+
+</details>
+
+<details>
+<summary>6.15 Async Iterators over Streams </summary>
+
+```js
+const fs = require('fs');
+
+(async () => {
+  for await (const chunk of fs.createReadStream('file.txt')) {
+    console.log(chunk.toString());
+  }
+})();
+
+```
+
+</details>
+
+<details>
+<summary>6.16 HTTP Request Retry with Axios </summary>
+
+```js
+const axios = require('axios');
+
+async function fetchWithRetry(url, retries=3) {
+  for(let i=0; i<retries; i++){
+    try { return await axios.get(url); }
+    catch(e){ if(i===retries-1) throw e; }
+  }
+}
+
+fetchWithRetry('https://api.github.com').then(res => console.log(res.status));
+
+```
+
+</details>
+
+<details>
+<summary>6.17 Memory Usage Analysis - Node.js process memory for optimization.</summary>
+
+```js
+console.log('Memory Usage:', process.memoryUsage());
+
+```
+
+</details>
+
 
 <!-- Add remaining advanced examples -->
 
