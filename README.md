@@ -1748,24 +1748,137 @@ performance.measure('loop', 'start', 'end');
 ## 7. Practical Projects & Utilities 
 
 <details>
-<summary>Command Line Tool</summary>
+<summary>7.1 Image Resizer CLI</summary>
 
 ```js
-// Example: Simple CLI
-const args = process.argv.slice(2);
-console.log(`Hello ${args[0] || 'World'}`);
+#!/usr/bin/env node
+// file: img-resizer.js
+const { Command } = require('commander');
+const sharp = require('sharp');
+const program = new Command();
+
+program
+  .requiredOption('-i, --input <file>', 'input image')
+  .requiredOption('-o, --output <file>', 'output image')
+  .option('-w, --width <n>', 'width', parseInt)
+  .option('-h, --height <n>', 'height', parseInt)
+  .action(async opts => {
+    await sharp(opts.input)
+      .resize(opts.width, opts.height)
+      .toFile(opts.output);
+    console.log(`Saved ${opts.output}`);
+  });
+
+program.parse();
+// sample run: node img-resizer.js -i photo.jpg -o thumb.jpg -w 300
 ```
 
 </details>
 
 <details>
-<summary>Email Sender</summary>
+<summary>7.2 PDF Merger Utility</summary>
 
 ```js
-// Example: Send email with Nodemailer
-const nodemailer = require('nodemailer');
-const transporter = nodemailer.createTransport({ /* config */ });
-transporter.sendMail({ from:'you@domain.com', to:'user@domain.com', subject:'Test', text:'Hello' });
+// file: pdf-merge.js
+const { PDFDocument } = require('pdf-lib');
+const fs = require('fs');
+
+(async () => {
+  const files = process.argv.slice(2);
+  if (files.length < 2) return console.log('Usage: node pdf-merge.js a.pdf b.pdf ...');
+  const merged = await PDFDocument.create();
+
+  for (const f of files) {
+    const bytes = await fs.promises.readFile(f);
+    const pdf = await PDFDocument.load(bytes);
+    const pages = await merged.copyPages(pdf, pdf.getPageIndices());
+    pages.forEach(p => merged.addPage(p));
+  }
+
+  const out = await merged.save();
+  await fs.promises.writeFile('merged.pdf', out);
+  console.log('merged.pdf created');
+})();
+```
+
+</details>
+
+<details>
+<summary>7.3 System Info Dashboard (Web)</summary>
+
+```js
+// file: sys-dashboard.js
+const express = require('express');
+const os = require('os');
+const app = express();
+
+app.get('/', (req, res) => {
+  const data = {
+    platform: os.platform(),
+    uptime: os.uptime(),
+    load: os.loadavg(),
+    memory: { free: os.freemem(), total: os.totalmem() }
+  };
+  res.json(data);
+});
+
+app.listen(4000, () => console.log('System info on http://localhost:4000'));
+```
+
+</details>
+
+
+<details>
+<summary>7.4 Markdown → HTML Converter</summary>
+
+```js
+// file: md2html.js
+const fs = require('fs-extra');
+const { marked } = require('marked');
+
+(async () => {
+  const [,, input, output] = process.argv;
+  if (!input || !output) return console.log('Usage: node md2html.js in.md out.html');
+  const md = await fs.readFile(input, 'utf8');
+  const html = `<!DOCTYPE html><html><body>${marked(md)}</body></html>`;
+  await fs.writeFile(output, html);
+  console.log(`Converted ${input} → ${output}`);
+})();
+```
+
+</details>
+
+
+<details>
+<summary>7.5 Simple URL Shortener</summary>
+
+```js
+// file: url-shortener.js
+const express = require('express');
+const { nanoid } = require('nanoid');
+const fs = require('fs');
+const dbFile = './urls.json';
+const app = express();
+
+app.use(express.json());
+let db = fs.existsSync(dbFile) ? JSON.parse(fs.readFileSync(dbFile)) : {};
+
+app.post('/new', (req, res) => {
+  const { url } = req.body;
+  if (!url) return res.status(400).json({error:'url required'});
+  const id = nanoid(6);
+  db[id] = url;
+  fs.writeFileSync(dbFile, JSON.stringify(db));
+  res.json({ short: `http://localhost:5000/${id}` });
+});
+
+app.get('/:id', (req, res) => {
+  const long = db[req.params.id];
+  if (!long) return res.status(404).send('Not found');
+  res.redirect(long);
+});
+
+app.listen(5000, () => console.log('URL shortener on http://localhost:5000'));
 ```
 
 </details>
